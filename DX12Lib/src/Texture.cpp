@@ -126,6 +126,7 @@ void Texture::CreateViews()
                                                  m_DepthStencilView.GetDescriptorHandle() );
         }
         // Create SRV
+        bool supportSRV = CheckSRVSupport();
         if ( ( desc.Flags & D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE ) == 0 && CheckSRVSupport() )
         {
             m_ShaderResourceView = m_Device.AllocateDescriptors( D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV );
@@ -133,8 +134,7 @@ void Texture::CreateViews()
                                                    m_ShaderResourceView.GetDescriptorHandle() );
         }
         // Create UAV for each mip (only supported for 1D and 2D textures).
-        if ( ( desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS ) != 0 && CheckUAVSupport() &&
-             desc.DepthOrArraySize == 1 )
+        if ( ( desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS ) != 0 && CheckUAVSupport())
         {
             m_UnorderedAccessView =
                 m_Device.AllocateDescriptors( D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, desc.MipLevels );
