@@ -171,6 +171,7 @@ UINT SwapChain::Present( const std::shared_ptr<Texture>& texture )
 
     commandList->TransitionBarrier( backBuffer, D3D12_RESOURCE_STATE_PRESENT );
     m_CommandQueue.ExecuteCommandList( commandList );
+    m_CommandQueue.Flush();
 
     UINT syncInterval = m_VSync ? 1 : 0;
     UINT presentFlags = m_TearingSupported && !m_Fullscreen && !m_VSync ? DXGI_PRESENT_ALLOW_TEARING : 0;
